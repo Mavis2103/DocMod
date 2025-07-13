@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>DocMod - Documentation Platform</title>
+    <style>
+      body {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        margin: 0;
+        padding: 0;
+        background-color: #f8f9fa;
+        color: #333;
+      }
+      .header {
+        background-color: #007bff;
+        color: white;
+        padding: 20px 0;
+        text-align: center;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      }
+      .container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 40px 20px;
+      }
+      .welcome {
+        text-align: center;
+        margin-bottom: 40px;
+      }
+      .welcome h1 {
+        font-size: 3rem;
+        margin-bottom: 10px;
+      }
+      .welcome p {
+        font-size: 1.2rem;
+        color: #666;
+      }
+      .features {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 30px;
+        margin-top: 40px;
+      }
+      .feature {
+        background: white;
+        padding: 30px;
+        border-radius: 10px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        text-align: center;
+      }
+      .feature h3 {
+        color: #007bff;
+        margin-bottom: 15px;
+      }
+      .btn {
+        display: inline-block;
+        padding: 15px 30px;
+        background-color: #007bff;
+        color: white;
+        text-decoration: none;
+        border-radius: 5px;
+        margin-top: 20px;
+        transition: background-color 0.3s;
+      }
+      .btn:hover {
+        background-color: #0056b3;
+      }
+      .footer {
+        background-color: #343a40;
+        color: white;
+        text-align: center;
+        padding: 20px 0;
+        margin-top: 60px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="header">
+      <h1>DocMod</h1>
+      <p>Modern Documentation Platform</p>
+    </div>
+
+    <div class="container">
+      <div class="welcome">
+        <h1>Welcome to DocMod</h1>
+        <p>Your modern documentation platform powered by Bun and TypeScript</p>
+      </div>
+
+      <div class="features">
+        <div class="feature">
+          <h3>📝 Markdown Support</h3>
+          <p>Write documentation in Markdown format with full support for syntax highlighting and formatting.</p>
+        </div>
+        <div class="feature">
+          <h3>🚀 Fast Performance</h3>
+          <p>Built with Bun for lightning-fast performance and efficient resource usage.</p>
+        </div>
+        <div class="feature">
+          <h3>📱 Responsive Design</h3>
+          <p>Optimized for all devices with a modern, clean interface that works everywhere.</p>
+        </div>
+      </div>
+
+      <div style="text-align: center; margin-top: 40px">
+        <a href="/api/health" class="btn">Check API Status</a>
+      </div>
+    </div>
+
+    <div class="footer">
+      <p>&copy; 2025 DocMod. All rights reserved.</p>
+    </div>
+  </body>
+</html>
