@@ -139,7 +139,7 @@ const server = Bun.serve({
 
         // Chạy vitepress build cho folder mới
         console.log(`🔨 Bắt đầu build VitePress cho folder: ${commitHash}`);
-        const buildProcess = Bun.spawn(['bunx', 'vitepress', 'build', `--base=/view/${commitHash}/`, commitHash], {
+        const buildProcess = Bun.spawn([`bunx vitepress build --base /view/${commitHash}/ ${commitHash}`], {
           cwd: process.cwd(),
           stdout: 'pipe',
           stderr: 'pipe'
