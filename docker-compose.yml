@@ -21,7 +21,7 @@ services:
       - "81:80"
     restart: unless-stopped
     volumes:
-      - ./nginx_custom.conf:/etc/nginx/nginx_custom.conf
+      - ./nginx.conf:/etc/nginx/nginx.conf
       - ./html:/usr/share/nginx/html
       - docmod-data:/app
     networks:
