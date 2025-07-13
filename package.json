@@ -13,7 +13,8 @@
   "dependencies": {},
   "devDependencies": {
     "@types/bun": "latest",
+    "markdown-it-mathjax3": "^4.3.2",
     "typescript": "^5.0.0",
-    "vitepress": "^1.6.3"
+    "vitepress": "^2.0.0-alpha.8"
   }
 }
