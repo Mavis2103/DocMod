@@ -3,11 +3,13 @@
   "version": "1.0.0",
   "description": "Backend for Frontend (BFF) server for docmod - HTTP server with Bun + TypeScript for deploying markdown files",
   "scripts": {
-    "server": "bun run server.ts",
-    "server:js": "bun run server.js",
+    "start": "bun run server.ts",
     "dev": "bun --watch server.ts",
-    "type-check": "tsc --noEmit"
+    "type-check": "tsc --noEmit",
+    "test": "bun test",
+    "clean": "rm -rf dist"
   },
+  "main": "server.ts",
   "dependencies": {},
   "devDependencies": {
     "@types/bun": "latest",
