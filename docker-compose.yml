@@ -6,8 +6,8 @@ services:
       context: .
       dockerfile: Dockerfile
     container_name: docmod-bff
-    expose:
-      - "3000"
+    ports:
+      - "3000:3000"
     restart: unless-stopped
     volumes:
       - docmod-data:/app
