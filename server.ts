@@ -26,6 +26,8 @@ function copyFolderRecursive(source: string, target: string): void {
 
 // Hàm replace file .md trong folder
 async function replaceMarkdownFiles(targetFolder: string, markdownFiles: Record<string, string>): Promise<void> {
+  const writePromises: Promise<number>[] = [];
+
   for (const [filePath, content] of Object.entries(markdownFiles)) {
     const fullPath: string = join(targetFolder, filePath);
 
@@ -35,9 +37,12 @@ async function replaceMarkdownFiles(targetFolder: string, markdownFiles: Record<
       mkdirSync(parentDir, { recursive: true });
     }
 
-    // Ghi file
-    await Bun.write(fullPath, content);
+    // Thêm promise ghi file vào array
+    writePromises.push(Bun.write(fullPath, content));
   }
+
+  // Đợi tất cả file được ghi xong
+  await Promise.all(writePromises);
 }
 
 const server = Bun.serve({
