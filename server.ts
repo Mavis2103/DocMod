@@ -140,16 +140,19 @@ const server = Bun.serve({
         }
 
         // Tạo folder và save các file theo đường dẫn của chúng
+        console.log(`📝 Bắt đầu ghi ${Object.keys(markdownFiles).length} file vào folder: ${commitHash}`);
         await replaceMarkdownFiles(targetFolder, markdownFiles);
+        console.log(`✅ Đã ghi xong tất cả file vào folder: ${commitHash}`);
 
         // Chạy vitepress build cho folder mới
         console.log(`🔨 Bắt đầu build VitePress cho folder: ${commitHash}`);
-        const buildProcess = Bun.spawn([`bunx vitepress build --base /view/${commitHash}/ ${commitHash}`], {
+        const buildProcess = Bun.spawn([`bunx`, `vitepress`, `build`, `--base=/${commitHash}/`, commitHash], {
           cwd: process.cwd(),
           stdout: 'pipe',
           stderr: 'pipe'
         });
 
+        console.log(`⏳ Đang đợi VitePress build hoàn thành...`);
         const buildOutput = await buildProcess.exited;
 
         if (buildOutput !== 0) {
