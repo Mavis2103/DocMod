@@ -1,0 +1,22 @@
+version: '3.8'
+
+services:
+  docmod-bff:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: docmod-bff
+    ports:
+      - "3000:3000"
+    restart: unless-stopped
+    volumes:
+      - docmod-data:/app/data
+    networks:
+      - docmod-network
+volumes:
+  docmod-data:
+    driver: local
+
+networks:
+  docmod-network:
+    driver: bridge
