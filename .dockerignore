@@ -50,10 +50,6 @@ temp/
 # Generated folders (commit hash folders)
 [a-f0-9]*/
 
-# VitePress build output
-.vitepress/dist/
-.vitepress/cache/
-
 # Backup files
 *.bak
 

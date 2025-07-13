@@ -37,12 +37,11 @@ RUN bun install --frozen-lockfile --production
 COPY --from=builder /app/server.ts ./
 COPY --from=builder /app/types.ts ./
 
-# Tạo thư mục cho data
-RUN mkdir -p /app/data
-
 # Tạo non-root user để chạy application
 RUN groupadd -r appuser && useradd -r -g appuser appuser
 RUN chown -R appuser:appuser /app
+# Đảm bảo data directory có permissions đúng
+RUN chmod 755 /app
 USER appuser
 
 # Expose port

@@ -10,7 +10,7 @@ services:
       - "3000"
     restart: unless-stopped
     volumes:
-      - docmod-data:/app/data
+      - docmod-data:/app
     networks:
       - docmod-network
 
@@ -23,7 +23,7 @@ services:
     volumes:
       - ./nginx.conf:/etc/nginx/nginx.conf
       - ./html:/usr/share/nginx/html
-      - docmod-data:/app/data
+      - docmod-data:/app
     networks:
       - docmod-network
     depends_on:
