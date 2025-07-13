@@ -1,4 +1,4 @@
-import { copyFileSync, existsSync, mkdirSync, readdirSync, statSync } from 'fs';
+import { copyFileSync, existsSync, mkdirSync, readdirSync, statSync, rmSync } from 'fs';
 import { join, dirname, extname } from 'path';
 import type { DeployResponse, ErrorResponse, HealthResponse, NotFoundResponse, ApiResponse } from './types';
 
@@ -157,8 +157,24 @@ const server = Bun.serve({
 
         if (buildOutput !== 0) {
           console.error(`❌ VitePress build failed với exit code: ${buildOutput}`);
-          // Không fail toàn bộ process, chỉ log warning
-          console.warn(`⚠️ Build failed cho folder ${commitHash}, nhưng files đã được tạo thành công`);
+
+          // Xóa folder commitHash nếu build thất bại
+          try {
+            if (existsSync(targetFolder)) {
+              rmSync(targetFolder, { recursive: true, force: true });
+              console.log(`🗑️ Đã xóa folder ${commitHash} do build thất bại`);
+            }
+          } catch (deleteError) {
+            console.error(`❌ Không thể xóa folder ${commitHash}:`, deleteError);
+          }
+
+          const errorResponse: ErrorResponse = {
+            error: `VitePress build thất bại cho folder ${commitHash}. Folder đã được xóa.`
+          };
+          return new Response(JSON.stringify(errorResponse), {
+            status: 500,
+            headers: { 'Content-Type': 'application/json', ...corsHeaders }
+          });
         } else {
           console.log(`✅ VitePress build thành công cho folder: ${commitHash}`);
         }
