@@ -82,22 +82,40 @@ const server = Bun.serve({
           });
         }
 
-        // Lấy tất cả file .md từ form data
+        // Lấy tất cả file từ form data
         const markdownFiles: Record<string, string> = {};
-        let fileCount: number = 0;
+        const fileEntries = Array.from(formData.entries()).filter(
+          ([key, value]) => key.startsWith('file_') && value && typeof value === 'object' && 'text' in value
+        );
 
-        for (const [key, value] of formData.entries()) {
-          if (key.startsWith('file_') && value && typeof value === 'object' && 'text' in value) {
-            const fileName: string = key.substring(5); // Remove 'file_' prefix
-            if (extname(fileName) === '.md') {
-              markdownFiles[fileName] = await (value as File).text();
-              fileCount++;
-            }
+        // Xử lý song song các file
+        const filePromises = fileEntries.map(async ([key, value]) => {
+          const fileIndex = key.substring(5); // Remove 'file_' prefix
+          const pathKey = `path_${fileIndex}`;
+          const filePath = formData.get(pathKey);
+
+          // Kiểm tra bắt buộc phải có path
+          if (!filePath || typeof filePath !== 'string') {
+            throw new Error(`Thiếu đường dẫn cho file ${fileIndex} (key: ${pathKey})`);
           }
-        }
+
+          return {
+            path: filePath,
+            content: await (value as unknown as File).text()
+          };
+        });
+
+        const processedFiles = await Promise.all(filePromises);
+
+        // Tạo object markdownFiles từ kết quả
+        processedFiles.forEach(({ path, content }) => {
+          markdownFiles[path] = content;
+        });
+
+        const fileCount = processedFiles.length;
 
         if (fileCount === 0) {
-          const errorResponse: ErrorResponse = { error: 'Không tìm thấy file .md nào' };
+          const errorResponse: ErrorResponse = { error: 'Không tìm thấy file nào' };
           return new Response(JSON.stringify(errorResponse), {
             status: 400,
             headers: { 'Content-Type': 'application/json', ...corsHeaders }
@@ -116,12 +134,30 @@ const server = Bun.serve({
           });
         }
 
-        // Tạo folder và save các file .md theo đường dẫn của chúng
+        // Tạo folder và save các file theo đường dẫn của chúng
         await replaceMarkdownFiles(targetFolder, markdownFiles);
+
+        // Chạy vitepress build cho folder mới
+        console.log(`🔨 Bắt đầu build VitePress cho folder: ${commitHash}`);
+        const buildProcess = Bun.spawn(['bunx', 'vitepress', 'build', commitHash], {
+          cwd: process.cwd(),
+          stdout: 'pipe',
+          stderr: 'pipe'
+        });
+
+        const buildOutput = await buildProcess.exited;
+
+        if (buildOutput !== 0) {
+          console.error(`❌ VitePress build failed với exit code: ${buildOutput}`);
+          // Không fail toàn bộ process, chỉ log warning
+          console.warn(`⚠️ Build failed cho folder ${commitHash}, nhưng files đã được tạo thành công`);
+        } else {
+          console.log(`✅ VitePress build thành công cho folder: ${commitHash}`);
+        }
 
         const successResponse: DeployResponse = {
           success: true,
-          message: `Đã tạo thành công folder ${commitHash} với ${fileCount} file .md`,
+          message: `Đã tạo thành công folder ${commitHash} với ${fileCount} file và chạy VitePress build`,
           folder: commitHash,
           filesProcessed: fileCount
         };
