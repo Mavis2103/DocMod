@@ -129,6 +129,7 @@ const server = Bun.serve({
 
         // Tạo folder với tên commit hash
         const targetFolder: string = join(process.cwd(), commitHash);
+        const defaultFolder: string = join(process.cwd(), 'default');
 
         // Kiểm tra xem folder đã tồn tại chưa
         if (existsSync(targetFolder)) {
@@ -139,10 +140,15 @@ const server = Bun.serve({
           });
         }
 
-        // Tạo folder và save các file theo đường dẫn của chúng
-        console.log(`📝 Bắt đầu ghi ${Object.keys(markdownFiles).length} file vào folder: ${commitHash}`);
+        // Clone folder default sang folder mới
+        console.log(`📂 Bắt đầu clone folder default sang folder: ${commitHash}`);
+        copyFolderRecursive(defaultFolder, targetFolder);
+        console.log(`✅ Đã clone xong folder default sang folder: ${commitHash}`);
+
+        // Thay thế các file markdown trong folder mới
+        console.log(`📝 Bắt đầu thay thế ${Object.keys(markdownFiles).length} file markdown trong folder: ${commitHash}`);
         await replaceMarkdownFiles(targetFolder, markdownFiles);
-        console.log(`✅ Đã ghi xong tất cả file vào folder: ${commitHash}`);
+        console.log(`✅ Đã thay thế xong tất cả file markdown trong folder: ${commitHash}`);
 
         // Chạy vitepress build cho folder mới
         console.log(`🔨 Bắt đầu build VitePress cho folder: ${commitHash}`);
@@ -181,7 +187,7 @@ const server = Bun.serve({
 
         const successResponse: DeployResponse = {
           success: true,
-          message: `Đã tạo thành công folder ${commitHash} với ${fileCount} file và chạy VitePress build`,
+          message: `Đã clone folder default, thay thế ${fileCount} file markdown và build VitePress thành công cho folder ${commitHash}`,
           folder: commitHash,
           filesProcessed: fileCount
         };
