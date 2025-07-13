@@ -131,15 +131,6 @@ const server = Bun.serve({
         const targetFolder: string = join(process.cwd(), commitHash);
         const defaultFolder: string = join(process.cwd(), 'default');
 
-        // Kiểm tra xem folder đã tồn tại chưa
-        if (existsSync(targetFolder)) {
-          const errorResponse: ErrorResponse = { error: `Folder ${commitHash} đã tồn tại` };
-          return new Response(JSON.stringify(errorResponse), {
-            status: 409,
-            headers: { 'Content-Type': 'application/json', ...corsHeaders }
-          });
-        }
-
         // Clone folder default sang folder mới
         console.log(`📂 Bắt đầu clone folder default sang folder: ${commitHash}`);
         copyFolderRecursive(defaultFolder, targetFolder);
