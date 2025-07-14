@@ -5,6 +5,7 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
+      no_cache: true # Force rebuild mỗi lần
     container_name: docmod-bff
     ports:
       - "3000:3000"
@@ -18,6 +19,7 @@ services:
     build:
       context: .
       dockerfile: Dockerfile.nginx
+      no_cache: true # Force rebuild mỗi lần
     container_name: docmod-nginx
     ports:
       - "81:80"
