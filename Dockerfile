@@ -36,6 +36,7 @@ RUN bun install --frozen-lockfile --production
 # Copy source code từ builder stage
 COPY --from=builder /app/server.ts ./
 COPY --from=builder /app/types.ts ./
+COPY --from=builder /app/default ./
 # COPY --from=builder /app/default ./default/
 
 # Tạo non-root user để chạy application
