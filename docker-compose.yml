@@ -7,8 +7,8 @@ services:
       dockerfile: Dockerfile
       no_cache: true # Force rebuild mỗi lần
     container_name: docmod-bff
-    ports:
-      - "3000:3000"
+    expose:
+      - 3000
     restart: unless-stopped
     volumes:
       - docmod-data:/app
@@ -21,8 +21,8 @@ services:
       dockerfile: Dockerfile.nginx
       no_cache: true # Force rebuild mỗi lần
     container_name: docmod-nginx
-    ports:
-      - "81:80"
+    expose:
+      - 80
     restart: unless-stopped
     volumes:
       - docmod-data:/app
